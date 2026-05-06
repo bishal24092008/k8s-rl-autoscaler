@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent K8s Autoscaler Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Intelligent K8s Autoscaler</h1>
+            <p class="subtitle">System Monitor & Traffic Controller</p>
+        </header>
+
+        <main>
+            <section class="metrics-grid">
+                <div class="metric-card" id="card-cpu">
+                    <h3>CPU Usage</h3>
+                    <div class="metric-value" id="cpu-value">12%</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="cpu-progress" style="width: 12%"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card" id="card-pods">
+                    <h3>Active Pods</h3>
+                    <div class="metric-value" id="pods-value">3</div>
+                    <div class="trend" id="pods-trend">Target: 3 (Stable)</div>
+                </div>
+
+                <div class="metric-card" id="card-latency">
+                    <h3>Response Time</h3>
+                    <div class="metric-value" id="latency-value">---</div>
+                    <div class="trend" id="latency-trend">Awaiting Traffic</div>
+                </div>
+            </section>
+
+            <section class="controls">
+                <h2>Traffic Simulation</h2>
+                <div class="button-group">
+                    <button id="btn-normal" class="btn primary">
+                        <span class="icon">🟢</span> Send Normal Traffic
+                    </button>
+                    <button id="btn-heavy" class="btn danger">
+                        <span class="icon">🔴</span> Trigger Heavy Traffic
+                    </button>
+                </div>
+                <div class="log-panel" id="log-panel">
+                    <div class="log-entry system"><span class="time">[System]</span> Dashboard initialized. Ready to simulate workloads.</div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
