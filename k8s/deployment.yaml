@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-backend-deployment
+  labels:
+    app: flask-backend
+spec:
+  # Initial number of replicas as requested
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-backend
+  template:
+    metadata:
+      labels:
+        app: flask-backend
+    spec:
+      containers:
+      - name: flask-backend
+        # Replace this with your actual image name and tag
+        image: your-dockerhub-username/flask-backend:latest 
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        # Resource requests and limits are REQUIRED for the Horizontal Pod Autoscaler (HPA) to work
+        resources:
+          requests:
+            cpu: "100m"     # 100 milliCPUs (0.1 CPU core)
+            memory: "128Mi" # 128 Megabytes of memory
+          limits:
+            cpu: "500m"     # Maximum 0.5 CPU core
+            memory: "256Mi" # Maximum 256 Megabytes of memory

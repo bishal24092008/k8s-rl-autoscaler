@@ -12,10 +12,9 @@ const podsValue = document.getElementById('pods-value');
 const podsTrend = document.getElementById('pods-trend');
 const latencyValue = document.getElementById('latency-value');
 const latencyTrend = document.getElementById('latency-trend');
-
-// State Simulation
-let currentCpu = 12;
-let currentPods = 3;
+const requestsValue = document.getElementById('requests-value');
+const statusValue = document.getElementById('status-value');
+const statusTrend = document.getElementById('status-trend');
 
 /**
  * Appends a log entry to the log panel.
@@ -35,52 +34,53 @@ function addLog(message, type = 'normal') {
 }
 
 /**
- * Updates UI cards to simulate system reaction to traffic.
+ * Fetches live metrics from the backend.
  */
-function updateMetricsUI(trafficType, responseTime) {
-    // Simulate CPU and Pod changes based on traffic type
-    if (trafficType === 'heavy') {
-        // Spike CPU heavily
-        currentCpu = Math.min(98, currentCpu + Math.floor(Math.random() * 30 + 40));
+async function fetchLiveMetrics() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/metrics`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
-        // Simulate Autoscaler kicking in if CPU is high
-        if (currentCpu > 70) {
-            currentPods = Math.min(10, currentPods + Math.floor(Math.random() * 2 + 1));
+        const data = await response.json();
+        
+        // Update CPU
+        cpuValue.textContent = `${data.simulated_cpu_usage}%`;
+        cpuProgress.style.width = `${data.simulated_cpu_usage}%`;
+        cpuProgress.style.backgroundColor = data.simulated_cpu_usage > 70 ? 'var(--danger)' : 'var(--accent-cyan)';
+        
+        // Update Pods
+        podsValue.textContent = data.pod_count;
+        if (data.pod_count > 4) {
             podsTrend.textContent = 'Scaling Up ↗';
             podsTrend.style.color = 'var(--warning)';
-        }
-        
-        // Update styling for heavy load
-        cpuProgress.style.backgroundColor = 'var(--danger)';
-        latencyTrend.style.color = 'var(--danger)';
-        latencyTrend.textContent = 'High Load';
-        
-    } else {
-        // Normal traffic causes slight fluctuations
-        currentCpu = Math.max(10, currentCpu + Math.floor(Math.random() * 10 - 5));
-        
-        // Simulate Autoscaler scaling down if CPU is low
-        if (currentCpu < 30 && currentPods > 3) {
-            currentPods--;
-            podsTrend.textContent = 'Scaling Down ↘';
-            podsTrend.style.color = 'var(--accent-cyan)';
-        } else if (currentPods === 3) {
+        } else {
             podsTrend.textContent = 'Target: 3 (Stable)';
             podsTrend.style.color = 'var(--success)';
         }
         
-        // Restore styling
-        cpuProgress.style.backgroundColor = currentCpu > 60 ? 'var(--warning)' : 'var(--accent-cyan)';
-        latencyTrend.style.color = 'var(--success)';
-        latencyTrend.textContent = 'Optimal';
-    }
+        // Update Latency
+        latencyValue.textContent = `${data.response_time_ms}ms`;
+        latencyTrend.textContent = data.response_time_ms > 500 ? 'High Latency' : 'Optimal';
+        latencyTrend.style.color = data.response_time_ms > 500 ? 'var(--warning)' : 'var(--success)';
 
-    // Apply values to DOM
-    cpuValue.textContent = `${currentCpu}%`;
-    cpuProgress.style.width = `${currentCpu}%`;
-    podsValue.textContent = currentPods;
-    latencyValue.textContent = `${responseTime}ms`;
+        // Update Requests
+        if(requestsValue) requestsValue.textContent = data.active_requests;
+
+        // Update Status
+        if(statusValue) statusValue.textContent = data.workload_status;
+        if(statusTrend) {
+            statusTrend.style.color = data.workload_status === 'High Load' ? 'var(--danger)' : 'var(--success)';
+        }
+        
+    } catch (error) {
+        console.error("Failed to fetch live metrics:", error);
+    }
 }
+
+// Start auto-refreshing metrics every 2 seconds
+setInterval(fetchLiveMetrics, 2000);
+// Initial fetch
+fetchLiveMetrics();
 
 /**
  * Sends a request to the backend API.
@@ -108,14 +108,9 @@ async function sendTraffic(type) {
         const latency = endTime - startTime;
         
         addLog(`[Success] Backend responded: "${data.message}" | Latency: ${latency}ms`, type);
-        updateMetricsUI(type, latency);
         
     } catch (error) {
         addLog(`[Error] Failed to connect to backend: ${error.message}. Is Flask running on port 5000?`, 'heavy');
-        
-        // Simulate the metrics change anyway for demo purposes if backend isn't running
-        const simulatedLatency = type === 'heavy' ? 2000 + Math.random()*500 : 100 + Math.random()*50;
-        updateMetricsUI(type, Math.floor(simulatedLatency));
         
     } finally {
         // Re-enable button
@@ -128,15 +123,4 @@ async function sendTraffic(type) {
 btnNormal.addEventListener('click', () => sendTraffic('normal'));
 btnHeavy.addEventListener('click', () => sendTraffic('heavy'));
 
-// Background task to simulate system cooling down over time
-setInterval(() => {
-    if (currentCpu > 15) {
-        currentCpu = Math.max(12, currentCpu - Math.floor(Math.random() * 5 + 2));
-        cpuValue.textContent = `${currentCpu}%`;
-        cpuProgress.style.width = `${currentCpu}%`;
-        
-        if (currentCpu < 60) {
-            cpuProgress.style.backgroundColor = 'var(--accent-cyan)';
-        }
-    }
-}, 4000);
+// End of script

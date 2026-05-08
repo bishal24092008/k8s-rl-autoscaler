@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: flask-backend-hpa
+spec:
+  # The target resource to scale (our Deployment)
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: flask-backend-deployment
+  
+  # Scaling limits
+  minReplicas: 2
+  maxReplicas: 10
+  
+  # Metrics used to trigger scaling
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      # Target CPU utilization is 70%
+      target:
+        type: Utilization
+        averageUtilization: 70
