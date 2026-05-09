@@ -1,0 +1,12 @@
+# Dependencies for RL Agent
+# We will use these libraries in the future for training our DQN agent
+
+# For mathematical operations and data manipulation
+numpy
+pandas
+
+# PyTorch for Deep Q-Network (DQN) implementation
+torch
+
+# For making API calls to our backend/Kubernetes to fetch metrics and send scaling commands
+requests
