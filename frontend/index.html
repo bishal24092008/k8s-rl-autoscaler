@@ -3,94 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intelligent K8s Autoscaler Dashboard</title>
+    <title>Enterprise K8s AI Operations Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Intelligent K8s Autoscaler</h1>
-            <p class="subtitle">System Monitor & Traffic Controller</p>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="icon">☸️</span> K8s AI Ops
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active"><span class="icon">📊</span> Dashboard</a>
+            <a href="#rl-insights" class="nav-item"><span class="icon">🧠</span> RL Agent Insights</a>
+            <a href="#training-analytics" class="nav-item"><span class="icon">📈</span> Training Analytics</a>
+            <a href="#xai" class="nav-item"><span class="icon">💡</span> Explainable AI</a>
+            <a href="#scaling-history" class="nav-item"><span class="icon">🔄</span> Scaling History</a>
+            <a href="#controls" class="nav-item"><span class="icon">🕹️</span> Traffic Simulation</a>
+            <a href="#system-logs" class="nav-item"><span class="icon">📋</span> System Logs</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Top Navigation Header -->
+        <header class="top-header">
+            <div class="header-titles">
+                <h1>Intelligent Kubernetes Autoscaler</h1>
+                <p class="subtitle">Reinforcement Learning Powered Scaling System</p>
+            </div>
+            <div class="header-status">
+                <div class="status-badge">
+                    <span class="pulse-indicator healthy" id="global-pulse"></span>
+                    <span id="global-status-text">ONLINE</span>
+                </div>
+                <div class="clock" id="live-clock">--:--:--</div>
+            </div>
         </header>
 
-        <main>
-            <section class="metrics-grid">
-                <div class="metric-card" id="card-cpu">
-                    <h3>CPU Usage</h3>
-                    <div class="metric-value" id="cpu-value">12%</div>
-                    <div class="progress-bar">
-                        <div class="progress" id="cpu-progress" style="width: 12%"></div>
+        <div class="container">
+            <!-- Core Dashboard -->
+            <section id="dashboard" class="dashboard-section">
+                <h2 class="section-header">Live System Metrics</h2>
+                <div class="metrics-grid">
+                    <!-- New Health Score -->
+                    <div class="metric-card glass" id="card-health">
+                        <h3>System Health</h3>
+                        <div class="metric-value" id="health-value">100%</div>
+                        <div class="trend" id="health-trend">Healthy</div>
                     </div>
-                </div>
-                
-                <div class="metric-card" id="card-pods">
-                    <h3>Active Pods</h3>
-                    <div class="metric-value" id="pods-value">3</div>
-                    <div class="trend" id="pods-trend">Target: 3 (Stable)</div>
-                </div>
 
-                <div class="metric-card" id="card-latency">
-                    <h3>Response Time</h3>
-                    <div class="metric-value" id="latency-value">---</div>
-                    <div class="trend" id="latency-trend">Awaiting Traffic</div>
-                </div>
+                    <div class="metric-card glass" id="card-cpu">
+                        <h3>CPU Usage</h3>
+                        <div class="metric-value" id="cpu-value">12%</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="cpu-progress" style="width: 12%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card glass" id="card-pods">
+                        <h3>Active Pods</h3>
+                        <div class="metric-value" id="pods-value">3</div>
+                        <div class="trend" id="pods-trend">Target: 3 (Stable)</div>
+                    </div>
 
-                <div class="metric-card" id="card-requests">
-                    <h3>Active Requests</h3>
-                    <div class="metric-value" id="requests-value">---</div>
-                    <div class="trend" id="requests-trend">Live Traffic</div>
-                </div>
+                    <div class="metric-card glass" id="card-latency">
+                        <h3>Response Time</h3>
+                        <div class="metric-value" id="latency-value">---</div>
+                        <div class="trend" id="latency-trend">Awaiting Traffic</div>
+                    </div>
 
-                <div class="metric-card" id="card-status">
-                    <h3>Workload Status</h3>
-                    <div class="metric-value" id="status-value">---</div>
-                    <div class="trend" id="status-trend">System Health</div>
-                </div>
-            </section>
+                    <div class="metric-card glass" id="card-requests">
+                        <h3>Active Requests</h3>
+                        <div class="metric-value" id="requests-value">---</div>
+                        <div class="trend" id="requests-trend">Live Traffic</div>
+                    </div>
 
-            <!-- New RL Agent Insights Section -->
-            <h2 class="section-header">RL Agent Insights</h2>
-            <section class="metrics-grid">
-                <!-- Card 1: RL Decision -->
-                <div class="metric-card" id="card-rl-decision">
-                    <h3>RL Decision</h3>
-                    <div class="metric-value" id="rl-decision-value">Maintain</div>
-                    <div class="trend" id="rl-decision-trend">Simulated Action</div>
-                </div>
-                
-                <!-- Card 2: Reward Score -->
-                <div class="metric-card" id="card-rl-reward">
-                    <h3>Reward Score</h3>
-                    <div class="metric-value" id="rl-reward-value">+0.0</div>
-                    <div class="trend" id="rl-reward-trend">Last Action Reward</div>
-                </div>
-
-                <!-- Card 3: Agent Confidence -->
-                <div class="metric-card" id="card-rl-confidence">
-                    <h3>Agent Confidence</h3>
-                    <div class="metric-value" id="rl-confidence-value">0%</div>
-                    <div class="progress-bar">
-                        <div class="progress" id="rl-confidence-progress" style="width: 0%; background-color: var(--accent-purple);"></div>
+                    <div class="metric-card glass" id="card-status">
+                        <h3>Workload Status</h3>
+                        <div class="metric-value" id="status-value">---</div>
+                        <div class="trend" id="status-trend">System Health</div>
                     </div>
                 </div>
             </section>
 
-            <section class="controls">
-                <h2>Traffic Simulation</h2>
-                <div class="button-group">
-                    <button id="btn-normal" class="btn primary">
-                        <span class="icon">🟢</span> Send Normal Traffic
-                    </button>
-                    <button id="btn-heavy" class="btn danger">
-                        <span class="icon">🔴</span> Trigger Heavy Traffic
-                    </button>
-                </div>
-                <div class="log-panel" id="log-panel">
-                    <div class="log-entry system"><span class="time">[System]</span> Dashboard initialized. Ready to simulate workloads.</div>
+            <!-- RL Agent Insights Section -->
+            <section id="rl-insights" class="dashboard-section">
+                <h2 class="section-header">RL Agent Insights</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card glass" id="card-rl-decision">
+                        <h3>RL Decision</h3>
+                        <div class="metric-value" id="rl-decision-value">Maintain</div>
+                        <div class="trend" id="rl-decision-trend">Simulated Action</div>
+                    </div>
+                    
+                    <div class="metric-card glass" id="card-rl-reward">
+                        <h3>Reward Score</h3>
+                        <div class="metric-value" id="rl-reward-value">+0.0</div>
+                        <div class="trend" id="rl-reward-trend">Last Action Reward</div>
+                    </div>
+
+                    <div class="metric-card glass" id="card-rl-confidence">
+                        <h3>Agent Confidence</h3>
+                        <div class="metric-value" id="rl-confidence-value">0%</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="rl-confidence-progress" style="width: 0%; background-color: var(--accent-purple);"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
-        </main>
+
+            <!-- Training Analytics Section -->
+            <section id="training-analytics" class="dashboard-section">
+                <h2 class="section-header">Training Analytics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card glass" id="card-episodes">
+                        <h3>Episodes Trained</h3>
+                        <div class="metric-value" id="episodes-value">0</div>
+                        <div class="trend" id="episodes-trend">Target: 100</div>
+                    </div>
+                    
+                    <div class="metric-card glass" id="card-avg-reward">
+                        <h3>Average Reward</h3>
+                        <div class="metric-value" id="avg-reward-value">0.0</div>
+                        <div class="trend" id="avg-reward-trend">Improving</div>
+                    </div>
+
+                    <div class="metric-card glass" id="card-learning-progress">
+                        <h3>Learning Progress</h3>
+                        <div class="metric-value" id="learning-progress-value">0%</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="learning-progress-bar" style="width: 0%; background-color: var(--success);"></div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card glass" id="card-epsilon">
+                        <h3>Exploration Rate (ε)</h3>
+                        <div class="metric-value" id="epsilon-value">1.00</div>
+                        <div class="trend" id="epsilon-trend">Decaying...</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container glass">
+                    <h3>Reward Trend Across Episodes</h3>
+                    <div class="canvas-wrapper">
+                        <canvas id="rewardChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Explainable AI Panel -->
+            <section id="xai" class="dashboard-section">
+                <h2 class="section-header">Explainable AI Panel</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card glass" id="card-xai-decision">
+                        <h3>Current AI Decision</h3>
+                        <div class="metric-value" id="xai-decision-value">Maintain</div>
+                        <div class="trend" id="xai-decision-trend">Active Policy</div>
+                    </div>
+
+                    <div class="metric-card glass" id="card-xai-reason">
+                        <h3>Decision Reason</h3>
+                        <div class="metric-value text-mode" id="xai-reason-value">System operating within normal thresholds.</div>
+                    </div>
+
+                    <div class="metric-card glass" id="card-xai-outcome">
+                        <h3>Expected Outcome</h3>
+                        <div class="metric-value text-mode" id="xai-outcome-value">Keep current pod count.</div>
+                    </div>
+
+                    <div class="metric-card glass" id="card-xai-risk">
+                        <h3>Risk Level</h3>
+                        <div class="metric-value" id="xai-risk-value">Low</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="xai-risk-progress" style="width: 30%; background-color: var(--success);"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Two Column Layout for Scaling History & Controls -->
+            <div class="split-layout">
+                <!-- Scaling History -->
+                <section id="scaling-history" class="dashboard-section split-col">
+                    <h2 class="section-header">Live Scaling History</h2>
+                    <div class="history-panel glass" id="history-panel">
+                        <!-- Items injected by JS -->
+                        <div class="history-item empty">Waiting for scaling events...</div>
+                    </div>
+                </section>
+
+                <!-- Traffic Simulation & Logs -->
+                <section id="controls" class="dashboard-section split-col">
+                    <h2 class="section-header">Traffic Simulation</h2>
+                    <div class="controls glass">
+                        <div class="button-group">
+                            <button id="btn-normal" class="btn primary">
+                                <span class="icon">🟢</span> Send Normal Traffic
+                            </button>
+                            <button id="btn-heavy" class="btn danger">
+                                <span class="icon">🔴</span> Trigger Heavy Traffic
+                            </button>
+                        </div>
+                        <h3 class="sub-header" id="system-logs">System Logs</h3>
+                        <div class="log-panel" id="log-panel">
+                            <div class="log-entry system"><span class="time">[System]</span> Dashboard initialized. Ready to simulate workloads.</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
