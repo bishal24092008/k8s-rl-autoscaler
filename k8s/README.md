@@ -391,10 +391,8 @@ This project can be extended into:
 
 Team Members:
 
-- Bishal Sahoo
-- Team Member 2
-- Team Member 3
-- Team Member 4
+- Bishal Kumar Sahoo
+- Aayush Kumar Mishra
 
 ---
 
