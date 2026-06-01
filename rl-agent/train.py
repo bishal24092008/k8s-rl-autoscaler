@@ -37,7 +37,7 @@ def main():
         # Reset the environment at the start of each episode and get initial state
         state = env.reset()
         total_reward = 0
-        
+       
         # 4. Episode Loop
         for time in range(max_steps):
             # A. The agent looks at the current state and decides what to do

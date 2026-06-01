@@ -49,6 +49,33 @@
                 </div>
             </section>
 
+            <!-- New RL Agent Insights Section -->
+            <h2 class="section-header">RL Agent Insights</h2>
+            <section class="metrics-grid">
+                <!-- Card 1: RL Decision -->
+                <div class="metric-card" id="card-rl-decision">
+                    <h3>RL Decision</h3>
+                    <div class="metric-value" id="rl-decision-value">Maintain</div>
+                    <div class="trend" id="rl-decision-trend">Simulated Action</div>
+                </div>
+                
+                <!-- Card 2: Reward Score -->
+                <div class="metric-card" id="card-rl-reward">
+                    <h3>Reward Score</h3>
+                    <div class="metric-value" id="rl-reward-value">+0.0</div>
+                    <div class="trend" id="rl-reward-trend">Last Action Reward</div>
+                </div>
+
+                <!-- Card 3: Agent Confidence -->
+                <div class="metric-card" id="card-rl-confidence">
+                    <h3>Agent Confidence</h3>
+                    <div class="metric-value" id="rl-confidence-value">0%</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="rl-confidence-progress" style="width: 0%; background-color: var(--accent-purple);"></div>
+                    </div>
+                </div>
+            </section>
+
             <section class="controls">
                 <h2>Traffic Simulation</h2>
                 <div class="button-group">

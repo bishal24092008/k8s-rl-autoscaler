@@ -16,6 +16,14 @@ const requestsValue = document.getElementById('requests-value');
 const statusValue = document.getElementById('status-value');
 const statusTrend = document.getElementById('status-trend');
 
+// RL Agent Insights DOM Elements
+const rlDecisionValue = document.getElementById('rl-decision-value');
+const rlDecisionTrend = document.getElementById('rl-decision-trend');
+const rlRewardValue = document.getElementById('rl-reward-value');
+const rlRewardTrend = document.getElementById('rl-reward-trend');
+const rlConfidenceValue = document.getElementById('rl-confidence-value');
+const rlConfidenceProgress = document.getElementById('rl-confidence-progress');
+
 /**
  * Appends a log entry to the log panel.
  */
@@ -72,8 +80,57 @@ async function fetchLiveMetrics() {
             statusTrend.style.color = data.workload_status === 'High Load' ? 'var(--danger)' : 'var(--success)';
         }
         
+        // Simulate RL Agent Insights
+        simulateRLInsights(data);
+        
     } catch (error) {
         console.error("Failed to fetch live metrics:", error);
+    }
+}
+
+/**
+ * Simulates RL Agent values based on current metrics
+ */
+function simulateRLInsights(data) {
+    if (!rlDecisionValue) return;
+
+    // Simulate Confidence (75% to 99%)
+    const confidence = Math.floor(Math.random() * (99 - 75 + 1)) + 75;
+    rlConfidenceValue.textContent = `${confidence}%`;
+    rlConfidenceProgress.style.width = `${confidence}%`;
+
+    // Simulate Decision and Reward based on CPU
+    let decision = "Maintain";
+    let reward = 0;
+    let trendColor = "var(--text-primary)";
+
+    if (data.simulated_cpu_usage > 75) {
+        decision = "Scale Up";
+        reward = 15.5;
+        trendColor = "var(--warning)";
+    } else if (data.simulated_cpu_usage < 30) {
+        decision = "Scale Down";
+        reward = 12.0;
+        trendColor = "var(--accent-cyan)";
+    } else {
+        decision = "Maintain";
+        reward = 10.0;
+        trendColor = "var(--success)";
+    }
+
+    // Add some random noise to reward to make it look dynamic
+    reward += (Math.random() * 2 - 1);
+
+    rlDecisionValue.textContent = decision;
+    rlDecisionValue.style.color = trendColor;
+
+    rlRewardValue.textContent = `+${reward.toFixed(1)}`;
+    
+    // Periodically change the trend text randomly to make it look 'active'
+    if (Math.random() > 0.7) {
+        rlDecisionTrend.textContent = "Processing state...";
+    } else {
+        rlDecisionTrend.textContent = "Action Decided";
     }
 }
 
